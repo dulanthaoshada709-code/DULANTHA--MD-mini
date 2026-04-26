@@ -2,9 +2,9 @@ FROM node:18-slim
 
 WORKDIR /app
 
-COPY package.json ./
+COPY package.json .npmrc ./
 
-RUN npm install --legacy-peer-deps --ignore-scripts
+RUN npm install --prefer-offline --no-audit --no-fund
 
 COPY . .
 
