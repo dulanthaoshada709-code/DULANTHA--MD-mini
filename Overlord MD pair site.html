@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>DULANTHA MD MINI</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #0a0a0a;
+      color: #ffffff;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    /* ========== LOADING SCREEN ========== */
+    #loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #0a0a0a;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+      transition: opacity 0.8s ease-out, visibility 0.8s ease-out;
+    }
+
+    #loading-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .loader-text {
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: #00e5ff;
+      text-shadow: 0 0 15px #00e5ff;
+      animation: pulseText 1.5s infinite;
+      margin-bottom: 2rem;
+      text-transform: uppercase;
+    }
+
+    @keyframes pulseText {
+      0% { opacity: 0.6; text-shadow: 0 0 10px #00e5ff; }
+      50% { opacity: 1; text-shadow: 0 0 25px #00e5ff, 0 0 40px #00b8d4; }
+      100% { opacity: 0.6; text-shadow: 0 0 10px #00e5ff; }
+    }
+
+    .loader-bar-bg {
+      width: 180px;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 15px;
+    }
+
+    .loader-bar-fill {
+      width: 0%;
+      height: 100%;
+      background: #00e5ff;
+      border-radius: 10px;
+      box-shadow: 0 0 15px #00e5ff;
+      animation: fillBar 2.2s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+    }
+
+    @keyframes fillBar {
+      0% { width: 0%; }
+      100% { width: 100%; }
+    }
+
+    /* ========== NEON BACKGROUND BUBBLES ========== */
+    .neon-bubbles {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .neon-bubbles span {
+      position: absolute;
+      display: block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #ffffff, #00e5ff);
+      animation: rise 8s linear infinite;
+      filter: drop-shadow(0 0 8px #00e5ff);
+      opacity: 0;
+    }
+
+    @keyframes rise {
+      0% {
+        transform: translateY(105vh) scale(0.3);
+        opacity: 0;
+      }
+      20% {
+        opacity: 0.7;
+      }
+      90% {
+        opacity: 0.1;
+      }
+      100% {
+        transform: translateY(-15vh) scale(1.4);
+        opacity: 0;
+      }
+    }
+
+    /* ========== MAIN CONTAINER ========== */
+    .container {
+      position: relative;
+      z-index: 2;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+
+    .box {
+      background: rgba(15, 15, 25, 0.7);
+      backdrop-filter: blur(20px);
+      padding: 2.2rem 1.8rem;
+      border-radius: 35px;
+      box-shadow: 0 0 30px rgba(0, 229, 255, 0.3);
+      text-align: center;
+      width: 380px;
+      max-width: 90vw;
+      animation: fadeInUp 1s ease-out;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h3 {
+      color: #00e5ff;
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-shadow: 0 0 20px #00b8d4;
+      margin-bottom: 0.2rem;
+    }
+
+    h6 {
+      color: #b0bec5;
+      font-weight: 400;
+      margin: 8px 0;
+      font-size: 0.9rem;
+    }
+
+    .input-container {
+      margin-top: 25px;
+      display: flex;
+      filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.4));
+    }
+
+    .input-container input {
+      width: 70%;
+      padding: 0.9rem 1rem;
+      border-radius: 20px 0 0 20px;
+      border: none;
+      outline: none;
+      background: #ffffff;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #000;
+      transition: 0.2s;
+    }
+
+    .input-container input:focus {
+      box-shadow: 0 0 15px #00e5ff;
+    }
+
+    .input-container button {
+      width: 30%;
+      padding: 0.9rem 0.5rem;
+      border: none;
+      border-radius: 0 20px 20px 0;
+      background: #00b8d4;
+      color: #0a0a0a;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: 0.3s ease;
+      letter-spacing: 0.5px;
+      background: linear-gradient(135deg, #00e5ff, #00b0c0);
+    }
+
+    .input-container button:hover {
+      background: linear-gradient(135deg, #66f0ff, #00e5ff);
+      box-shadow: 0 0 20px #00e5ff;
+      transform: scale(1.02);
+    }
+
+    /* Submit Button Click Animation */
+    .input-container button:active {
+      transform: scale(0.96);
+      transition: 0.1s;
+    }
+
+    .clicked-effect {
+      animation: buttonPulse 0.4s ease;
+    }
+
+    @keyframes buttonPulse {
+      0% { box-shadow: 0 0 0 0 rgba(0, 229, 255, 0.7); }
+      70% { box-shadow: 0 0 0 20px rgba(0, 229, 255, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(0, 229, 255, 0); }
+    }
+
+    .centered-text {
+      margin-top: 20px;
+      color: #e0e0e0;
+      font-weight: 500;
+      font-size: 0.9rem;
+      text-shadow: 0 0 8px #00b8d4;
+    }
+
+    main#pair {
+      margin-top: 15px;
+      min-height: 45px;
+    }
+
+    .info-container {
+      margin-top: 25px;
+      background: rgba(0, 20, 30, 0.5);
+      padding: 0.9rem 1.5rem;
+      border-radius: 40px;
+      color: #b2ebf2;
+      box-shadow: 0 0 25px rgba(0, 229, 255, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .info-item i {
+      color: #00e5ff;
+      filter: drop-shadow(0 0 5px #00e5ff);
+    }
+
+    #copy {
+      transition: 0.2s;
+      font-weight: 600;
+    }
+
+    /* Responsive */
+    @media (max-width: 400px) {
+      .box {
+        padding: 1.8rem 1.2rem;
+        border-radius: 30px;
+      }
+      h3 {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOADING SCREEN -->
+  <div id="loading-screen">
+    <div class="loader-text">DULANTHA MD MINI</div>
+    <div class="loader-bar-bg">
+      <div class="loader-bar-fill"></div>
+    </div>
+  </div>
+
+  <!-- BACKGROUND BUBBLES -->
+  <div class="neon-bubbles" id="neon-bubbles"></div>
+
+  <!-- MAIN APP -->
+  <div class="container">
+    <div class="box">
+      <!-- WhatsApp icon removed as requested, using a generic cool icon -->
+      <i class="fas fa-cloud-moon" style="color:#00e5ff; font-size: 2.4rem; filter: drop-shadow(0 0 10px #00b8d4);"></i>
+      <h3>DULANTHA MD</h3>
+      <h6>BY ᴅᴜʟᴀɴᴛʜᴀ ᴏꜱʜᴀᴅᴀ💐</h6>
+      <h6>📱 Enter your number with country code</h6>
+      
+      <div class="input-container">
+        <input placeholder="947xxxxxxxx" type="number" id="number">
+        <button id="submit">Submit</button>
+      </div>
+      
+      <a id="waiting-message" class="centered-text" style="display: none;">Please wait a while...</a>
+      <main id="pair"></main>
+
+      <div class="info-container">
+        <div class="info-item">
+          <i class="fas fa-clock"></i> Time: <span id="uptime">00:00:00</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // ----- LOADING SCREEN LOGIC -----
+      window.addEventListener('load', function() {
+        const loadingScreen = document.getElementById('loading-screen');
+        // Delay hiding a bit to let users see the animation (2.5s matches bar fill)
+        setTimeout(() => {
+          if (loadingScreen) {
+            loadingScreen.classList.add('hidden');
+          }
+        }, 2500);
+      });
+
+      // ----- NEON BUBBLES GENERATOR -----
+      const bubbleContainer = document.getElementById("neon-bubbles");
+      const bubbleCount = 45;
+      for (let i = 0; i < bubbleCount; i++) {
+        const bubble = document.createElement("span");
+        bubble.style.left = Math.random() * 100 + "vw";
+        bubble.style.width = (6 + Math.random() * 14) + "px";
+        bubble.style.height = bubble.style.width;
+        bubble.style.animationDuration = 6 + Math.random() * 8 + "s";
+        bubble.style.animationDelay = Math.random() * 9 + "s";
+        // Cyan / white monochrome style
+        const brightness = 70 + Math.floor(Math.random() * 30);
+        bubble.style.background = `radial-gradient(circle, hsl(190, 100%, ${brightness}%), hsl(190, 100%, 50%))`;
+        bubbleContainer.appendChild(bubble);
+      }
+
+      // ----- LIVE CLOCK -----
+      const uptime = document.getElementById("uptime");
+      function updateClock() {
+        const now = new Date();
+        let hours = now.getHours();
+        const mins = String(now.getMinutes()).padStart(2, '0');
+        const secs = String(now.getSeconds()).padStart(2, '0');
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12 || 12;
+        uptime.textContent = `${hours}:${mins}:${secs} ${ampm}`;
+      }
+      setInterval(updateClock, 1000);
+      updateClock();
+
+      // ----- PAIR CODE GENERATOR LOGIC (PRESERVED & ENHANCED) -----
+      const pairSection = document.getElementById("pair");
+      const submitBtn = document.getElementById("submit");
+      const numberInput = document.getElementById("number");
+
+      // Function to handle copy (kept exactly as original, just style adjusted)
+      window.Copy = async function() {
+        const copyElement = document.getElementById("copy");
+        if (!copyElement) return;
+        const originalText = copyElement.innerText;
+        // Extract code by removing "CODE: " prefix safely
+        const codeText = originalText.replace(/^CODE:\s*/, '');
+        try {
+          await navigator.clipboard.writeText(codeText);
+          copyElement.innerText = "COPIED";
+          copyElement.style.color = "lime";
+          copyElement.style.fontWeight = "bold";
+          setTimeout(() => {
+            copyElement.innerText = originalText;
+            copyElement.style.color = "deepskyblue";
+            copyElement.style.fontWeight = "bold";
+          }, 600);
+        } catch (err) {
+          alert("Copy failed. Please copy manually.");
+        }
+      };
+
+      // Submit button with animation effect
+      submitBtn.addEventListener("click", async function(e) {
+        e.preventDefault();
+        
+        // Add click animation class
+        submitBtn.classList.add('clicked-effect');
+        setTimeout(() => submitBtn.classList.remove('clicked-effect'), 400);
+        
+        const rawNumber = numberInput.value.trim();
+        
+        if (!rawNumber) {
+          pairSection.innerHTML = '<a style="color:#ffffff; font-weight:bold; text-shadow:0 0 5px #00e5ff;">Enter your WhatsApp number with Country Code</a><br><br>';
+          return;
+        }
+        
+        const cleanedNumber = rawNumber.replace(/[^0-9]/g, "");
+        
+        if (cleanedNumber.length < 11) {
+          pairSection.innerHTML = '<a style="color:#ff5555; font-weight:bold; text-shadow:0 0 5px red;">Invalid Number</a><br><br>';
+          return;
+        }
+        
+        // Format number and display waiting
+        numberInput.type = "text";
+        numberInput.value = "+" + cleanedNumber;
+        numberInput.style.color = "black";
+        numberInput.style.fontWeight = "500";
+        pairSection.innerHTML = '<a style="color:#ffffff; font-weight:bold; display:flex; align-items:center; justify-content:center; gap:8px;"><i class="fas fa-spinner fa-pulse"></i> Generating code...</a><br><br>';
+        
+        try {
+          // IMPORTANT: This fetch points to /code?number=... . It must be served by your backend.
+          const response = await fetch(`/code?number=${cleanedNumber}`);
+          const data = await response.json();
+          const code = data.code || "Service Unavailable";
+          
+          pairSection.innerHTML = `<div id="copy" onclick="Copy()" style="color:#00e5ff; font-weight:bold; cursor:pointer; background: rgba(0,229,255,0.1); padding: 10px 18px; border-radius: 30px; display: inline-block; transition:0.2s; backdrop-filter: blur(5px);">
+            CODE: <span style="color:#ffffff; letter-spacing:1px;">${code}</span>
+          </div><br><br>`;
+        } catch (error) {
+          pairSection.innerHTML = '<a style="color:#ff8888; font-weight:bold;">Connection error. Try again.</a><br><br>';
+          console.error(error);
+        }
+      });
+
+      // Also allow Enter key to submit
+      numberInput.addEventListener("keypress", function(e) {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          submitBtn.click();
+        }
+      });
+
+    })();
+  </script>
+</body>
+</html>
